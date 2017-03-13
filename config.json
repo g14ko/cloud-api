@@ -1,23 +1,23 @@
 {
-    "port": 3000,
-    "security": {
-        "tokenLife" : 3600
+  "port": 3000,
+  "security": {
+    "tokenLife": 3600
+  },
+  "mongoose": {
+    "uri": "mongodb://cloud-admin:4ls8d9afg38gf286ywgsa@ds157819.mlab.com:57819/cloud"
+  },
+  "default": {
+    "api": {
+      "version": "v1"
     },
-    "mongoose": {
-        "uri": "mongodb://localhost/apiDB"
+    "user": {
+      "username": "eugene",
+      "password": "admin"
     },
-    "default": {
-        "api": {
-            "version" : "v1"
-        },
-        "user": {
-            "username": "eugene",
-            "password": "admin"
-        },
-        "client": {
-            "name": "Android API v1",
-            "clientId": "android",
-            "clientSecret": "243lkjsd87yf348yf"
-        }
+    "client": {
+      "name": "Android API v1",
+      "clientId": "android",
+      "clientSecret": "243lkjsd87yf348yf"
     }
+  }
 }
