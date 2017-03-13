@@ -12,9 +12,11 @@ var config = require('./config');
 var log = require('./log')(module);
 var oauth2 = require('./auth/oauth2');
 
+var oauth = require('./routes/oauth');
 var api = require('./routes/api');
 var users = require('./routes/users');
 var articles = require('./routes/articles');
+var note = require('./routes/note');
 
 var app = express();
 
@@ -24,12 +26,13 @@ app.use(cookieParser());
 app.use(methodOverride());
 app.use(passport.initialize());
 
+app.use('/', oauth);
 app.use('/', api);
 app.use('/api', api);
+app.use('/api', note);
 app.use('/api/users', users);
 app.use('/api/article', articles);
 app.use('/api/articles', articles);
-app.use('/api/oauth/token', oauth2.token);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next){
