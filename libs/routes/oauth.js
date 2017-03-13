@@ -8,16 +8,17 @@ var cors = require('cors');
 var config = require(libs + 'config');
 var router = express.Router();
 
-var origins = config.get("cors:origins");
-var corsOptions = {
-    origin: function (origin, callback) {
-        var index = origins.indexOf(origin);
-        callback(index !== -1 ? origins[index] : null);
-    },
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+var corsOptionsDelegate = function (req, callback) {
+    var corsOptions;
+    if (config.get("cors:origins").indexOf(req.header('Origin')) !== -1) {
+        corsOptions = {origin: true}; // reflect (enable) the requested origin in the CORS response
+    } else {
+        corsOptions = {origin: false}; // disable CORS for this request
+    }
+    callback(null, corsOptions); // callback expects two parameters: error and options
 };
 
-router.options('/token', cors(corsOptions));
-router.post('/token', cors(corsOptions), oauth2.token);
+router.options('/token', cors(corsOptionsDelegate));
+router.post('/token', cors(corsOptionsDelegate), oauth2.token);
 
 module.exports = router;
