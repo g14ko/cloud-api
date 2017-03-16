@@ -6,8 +6,6 @@ var config = require(libs + 'config');
 var log = require(libs + 'log')(module);
 var app = require(libs + 'app');
 
-// app.use(cors(corsOptions));
-
 app.set('port', process.env.PORT || config.get('port') || 3000);
 
 var server = app.listen(app.get('port'), function() {
