@@ -9,7 +9,9 @@
   "cors": {
     "origins": [
       "http://cloud-admin",
-      "http://cloud.dev"
+      "http://cloud.dev",
+      "http://cloud.pub",
+      "http://eugene.zzz.com.ua"
     ]
   },
   "default": {
