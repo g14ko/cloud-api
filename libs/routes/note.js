@@ -8,12 +8,9 @@ var log = require(libs + 'log')(module);
 var db = require(libs + 'db/mongoose');
 var Note = require(libs + 'model/note');
 
+var config = require(libs + 'config');
 var cors = require('cors');
 
-// var corsOptions = {
-//     origin: 'http://cloud-admin',
-//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
 var corsOptionsDelegate = function (req, callback) {
     var corsOptions;
     if (config.get("cors:origins").indexOf(req.header('Origin')) !== -1) {
@@ -34,6 +31,7 @@ var corsOptionsDelegate = function (req, callback) {
 //     // return false;
 // });
 
+router.options('/notes', cors(corsOptionsDelegate));
 router.get('/notes', passport.authenticate('bearer', {session: false}), cors(corsOptionsDelegate)/*, abac.can('in-memory', 'use secret feature')*/, function (req, res) {
 
     Note.find(function (err, notes) {
