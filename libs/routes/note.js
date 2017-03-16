@@ -34,7 +34,15 @@ var corsOptionsDelegate = function (req, callback) {
 router.options('/notes', cors(corsOptionsDelegate));
 router.get('/notes', passport.authenticate('bearer', {session: false}), cors(corsOptionsDelegate)/*, abac.can('in-memory', 'use secret feature')*/, function (req, res) {
 
-    Note.find(function (err, notes) {
+    var query = {};
+    if (req.query.search) {
+        log.info(req.query.search);
+        query = {
+            title: new RegExp(req.query.search, "i")
+        }
+    }
+
+    Note.find(query, function (err, notes) {
         if (!err) {
             return res.json(notes);
         } else {
