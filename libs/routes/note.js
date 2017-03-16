@@ -10,12 +10,31 @@ var Note = require(libs + 'model/note');
 
 var cors = require('cors');
 
-var corsOptions = {
-    origin: 'http://cloud-admin',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// var corsOptions = {
+//     origin: 'http://cloud-admin',
+//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
+var corsOptionsDelegate = function (req, callback) {
+    var corsOptions;
+    if (config.get("cors:origins").indexOf(req.header('Origin')) !== -1) {
+        corsOptions = {origin: true}; // reflect (enable) the requested origin in the CORS response
+    } else {
+        corsOptions = {origin: false}; // disable CORS for this request
+    }
+    callback(null, corsOptions); // callback expects two parameters: error and options
 };
 
-router.get('/notes', passport.authenticate('bearer', {session: false}), cors(corsOptions), function (req, res) {
+// var abac = require('abac');
+//
+// abac.set_policy('in-memory', 'view', false);
+// abac.set_policy('in-memory', 'use secret feature', function(req) {
+//     log.info(ok);
+//     return true;
+//     // if (req.user.role == 'employee') { return true; }
+//     // return false;
+// });
+
+router.get('/notes', passport.authenticate('bearer', {session: false}), cors(corsOptionsDelegate)/*, abac.can('in-memory', 'use secret feature')*/, function (req, res) {
 
     Note.find(function (err, notes) {
         if (!err) {
@@ -61,9 +80,9 @@ router.get('/note/:id', passport.authenticate('bearer', {session: false}), funct
 
 });
 
-router.options('/note', cors(corsOptions));
+router.options('/note', cors(corsOptionsDelegate));
 
-router.post('/note', passport.authenticate('bearer', {session: false}), cors(corsOptions), function (req, res) {
+router.post('/note', passport.authenticate('bearer', {session: false}), cors(corsOptionsDelegate), function (req, res) {
 
     var note = new Note(req.body);
 
