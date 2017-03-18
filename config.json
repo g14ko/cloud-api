@@ -4,7 +4,7 @@
     "tokenLife": 3600
   },
   "mongoose": {
-    "uri": "mongodb://localhost:27017/cloud"
+    "uri": "mongodb://cloud-admin:4ls8d9afg38gf286ywgsa@ds157819.mlab.com:57819/cloud"
   },
   "cors": {
     "origins": [
