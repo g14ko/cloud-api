@@ -14,6 +14,7 @@ var isNoteUnique = function (value, done) {
 };
 
 var note = new Schema({
+    categories:  [String],
     lang: {type: String, required: true},
     title: {
         type: String,

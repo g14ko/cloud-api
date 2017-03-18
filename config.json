@@ -4,11 +4,12 @@
     "tokenLife": 3600
   },
   "mongoose": {
-    "uri": "mongodb://cloud-admin:4ls8d9afg38gf286ywgsa@ds157819.mlab.com:57819/cloud"
+    "uri": "mongodb://localhost:27017/cloud"
   },
   "cors": {
     "origins": [
-      "http://cloud-admin",
+      "http://cloud-admin.dev",
+      "http://cloud-admin.pub",
       "http://cloud.dev",
       "http://cloud.pub",
       "http://eugene.zzz.com.ua"

@@ -161,4 +161,58 @@ router.put('/note/:id', passport.authenticate('bearer', {session: false}), funct
     });
 });
 
+router.options('/note/import', cors(corsOptionsDelegate));
+router.post('/note/import', passport.authenticate('bearer', {session: false}), cors(corsOptionsDelegate), function (req, res) {
+
+    var
+        remove = function (note) {
+            return new Promise(function (resolve, reject) {
+                Note.remove({title: note.title, lang: note.lang}, function (err) {
+                    if (err) {
+                        reject('error');
+                    }
+                    resolve(note);
+                });
+            });
+        },
+        save = function (note) {
+            return new Promise(function (resolve, reject) {
+                note = new Note(note);
+                note.save(function (err) {
+                    if (err) {
+                        reject();
+                    }
+                    resolve(note);
+                });
+            });
+        },
+        p = new Promise(function (resolve, reject) {
+            var
+                notes = [],
+                data = req.body,
+                length = data.length;
+            data.map(function (note) {
+                remove(note).then(function (note) {
+                    save(note).then(function (note) {
+                        length--;
+                        notes.push(note);
+                        if (!length) {
+                            resolve(notes);
+                        }
+                    });
+                });
+            });
+        });
+
+
+    return p.then(function (notes) {
+        return res.json({
+            status: 'OK',
+            imported: notes
+        });
+    });
+
+
+});
+
 module.exports = router;
