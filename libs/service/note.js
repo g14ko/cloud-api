@@ -99,9 +99,10 @@ service.isEmptyObject = function (object) {
 service.getAll = service.protect(function (req, res) {
     var query = {};
     if (req.query.search) {
-        query = {
-            title: new RegExp(req.query.search, 'i')
-        }
+        query.title = new RegExp(req.query.search, 'i');
+    }
+    if (req.query.category) {
+        query.categories = req.query.category;
     }
 
     Note.find(query, function (err, notes) {
@@ -244,5 +245,14 @@ service.import = service.protect(function (req, res) {
         });
     });
 }, 'import notes');
+
+service.categories = service.protect(function (req, res) {
+    Note.find().distinct('categories', function (err, categories) {
+        return res.json({
+            status: 'OK',
+            categories: categories.sort()
+        });
+    });
+}, 'notes');
 
 module.exports = service;

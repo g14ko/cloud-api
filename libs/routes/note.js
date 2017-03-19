@@ -5,6 +5,7 @@ var libs = process.cwd() + '/libs/';
 var log = require(libs + 'log')(module);
 var note = require(libs + 'service/note');
 
+router.get('/note/categories', note.categories);
 router.get('/notes', note.getAll);
 router.get('/note/:id', note.get);
 router.post('/note', note.create);
